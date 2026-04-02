@@ -1,0 +1,7 @@
+# Credentials
+.env
+
+# Dataset
+data/raw_data/
+*.csv
+!data/sample_data/*.csv
