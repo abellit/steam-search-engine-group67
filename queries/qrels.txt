@@ -1,0 +1,8 @@
+# TREC format relevance judgements
+# Format: query_id  0  doc_id  relevance
+# relevance: 0 = not relevant, 1 = relevant, 2 = highly relevant
+#
+# Example:
+# 1  0  730  2
+# 1  0  1203  1
+# 1  0  4521  0
