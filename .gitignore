@@ -1,5 +1,28 @@
+# Virtual environment
+.venv/
+venv/
+
 # Credentials
 .env
 
-# Virtual Environment
-.venv/
+# Dataset - too large for git
+data/raw/
+*.csv
+!data/sample_data/sam.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
