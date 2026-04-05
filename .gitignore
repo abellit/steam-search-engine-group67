@@ -8,7 +8,7 @@ venv/
 # Dataset - too large for git
 data/raw/
 *.csv
-!data/sample_data/sam.csv
+!data/sample_data/games_sample.csv
 
 # Python
 __pycache__/

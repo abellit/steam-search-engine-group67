@@ -1,4 +1,3 @@
-```
 multiplayer shooter
 open world survival
 turn based strategy
@@ -24,4 +23,3 @@ detective mystery
 martial arts fighting
 free to play MMO
 story driven RPG
-```
