@@ -15,6 +15,7 @@ __pycache__/
 *.py[cod]
 *.pyo
 
+
 # Jupyter
 .ipynb_checkpoints/
 
