@@ -1,10 +1,10 @@
 from functools import lru_cache
-
+from sentence_transformers import SentenceTransformer, util
 
 # Load model once at module level
 @lru_cache(maxsize=1)
 def get_model():
-    from sentence_transformers import SentenceTransformer
+    
     return SentenceTransformer("all-MiniLM-L6-v2")
 
 
@@ -22,7 +22,7 @@ def rerank_documents(query: str, candidates: list[dict], top_k: int = 10) -> lis
     ]
 
     # All candidates and query encoded into vectors
-    from sentence_transformers import util
+    
     model = get_model()
     query_embeddings = model.encode(query)
     candidate_embeddings = model.encode(candidate_texts)

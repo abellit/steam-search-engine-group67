@@ -51,7 +51,14 @@ if query.strip():
         for i, result in enumerate(results, start=1):
             title = result.get("title", "No title")
             app_id = result.get("app_id", "N/A")
-            score = result.get("score", result.get("reranked_score", 0.0))
+            
+            #score = result.get("score", result.get("reranked_score", 0.0))
+
+            if model_choice == "BM25F + Reranker":
+                score = result.get("reranked_score", 0.0)
+            else:
+                score = result.get("score", 0.0)
+                
 
             st.markdown(f"**{i}. {title}**")
             st.write(f"App ID: {app_id}")
