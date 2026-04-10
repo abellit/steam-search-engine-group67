@@ -82,6 +82,11 @@ Using the full dataset (~83,000 games) for the complete demo:
 python scripts/build_index.py --data data/cleaned_data/games_may2024_cleaned.csv
 ```
 
+To delete an existing index run this command:
+```bash
+curl -X DELETE http://localhost:9200/steam_games
+```
+
 ### 8. Run the demo
 ```bash
 streamlit run app/streamlit_app.py
