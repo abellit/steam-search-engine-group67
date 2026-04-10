@@ -1,4 +1,3 @@
-```
 multiplayer shooter
 open world survival
 turn based strategy
@@ -18,10 +17,9 @@ battle royale
 underwater exploration
 sci-fi strategy
 farming simulator
-dark souls like
+dark souls like games
 superhero action
 detective mystery
 martial arts fighting
 free to play MMO
 story driven RPG
-```

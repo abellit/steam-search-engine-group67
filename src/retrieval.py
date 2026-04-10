@@ -1,6 +1,7 @@
 from elasticsearch import Elasticsearch
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from src.preprocessing import preprocess_text
 import pandas as pd
 import numpy as np
 from dotenv import load_dotenv
@@ -43,11 +44,13 @@ FIELD_WEIGHTS = {
 df = pd.read_csv("data/sample_data/games_sample.csv").fillna("")
 
 # Combnie fields into one text representation per document
-corpus = (
-    df["name"] + " " +
-    df["short_description"] + " " +
-    df["genres"] + " " +
-    df["tags"]
+corpus = df.apply(
+    lambda row: " ".join(
+        preprocess_text(str(row["name"])) +
+        preprocess_text(str(row["short_description"])) +
+        preprocess_text(str(row["genres"])) +
+        preprocess_text(str(row["tags"]))
+    ), axis=1
 )
 
 vectoriser = TfidfVectorizer(stop_words="english")
@@ -55,7 +58,7 @@ tfidf_matrix = vectoriser.fit_transform(corpus)
 
 def search_tfidf(query: str, top_k: int = 10) -> list[dict]:
     """Search using TF-IDF across all fields equally."""
-
+    query = " ".join(preprocess_text(query))
     query_vector = vectoriser.transform([query])
     scores = cosine_similarity(query_vector, tfidf_matrix)[0]
     top_indices = np.argsort(scores)[::-1][:top_k]
@@ -75,7 +78,7 @@ def search_tfidf(query: str, top_k: int = 10) -> list[dict]:
 
 def search_bm25(query: str, top_k: int = 10) -> list[dict]:
     """Search using flat BM25 across all fields equally."""
-
+    query = " ".join(preprocess_text(query))
     response = es_client.search(
         index=INDEX_NAME,
         query={
@@ -93,7 +96,7 @@ def search_bm25(query: str, top_k: int = 10) -> list[dict]:
 
 def search_bm25f(query: str, top_k: int = 10) -> list[dict]:
     """Search using BM25F with field weights."""
-
+    query = " ".join(preprocess_text(query))
     # Build boosted fields list from FIELD_WEIGHTS
     boosted_fields = [f"{field}^{weight}" for field, weight in FIELD_WEIGHTS.items()]
 

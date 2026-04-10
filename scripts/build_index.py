@@ -128,4 +128,3 @@ def index_documents_bm25(filepath: str):
 if __name__ == "__main__":
     create_index(True)
     index_documents_bm25(file)
-   
