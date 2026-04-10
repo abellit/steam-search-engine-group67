@@ -1,10 +1,19 @@
+from functools import lru_cache
 from sentence_transformers import SentenceTransformer, util
 
 # Load model once at module level
-model = SentenceTransformer("all-MiniLM-L6-v2")
+@lru_cache(maxsize=1)
+def get_model():
+    
+    return SentenceTransformer("all-MiniLM-L6-v2")
+
 
 def rerank_documents(query: str, candidates: list[dict], top_k: int = 10) -> list[dict]:
     """Reramk game document candidates using semantic similarity"""
+    
+    # If no results return []
+    if not candidates:
+        return []
 
     # Text representation for each candidate
     candidate_texts = [
@@ -13,6 +22,8 @@ def rerank_documents(query: str, candidates: list[dict], top_k: int = 10) -> lis
     ]
 
     # All candidates and query encoded into vectors
+    
+    model = get_model()
     query_embeddings = model.encode(query)
     candidate_embeddings = model.encode(candidate_texts)
 
