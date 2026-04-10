@@ -121,7 +121,10 @@ def index_documents_bm25(filepath: str):
         for _, row in df.iterrows()
     ]
 
-    bulk(es_client, actions)
+    bulk(es_client,
+        actions,
+        chunk_size=500,
+        request_timeout=120)
     print(f"{len(df)} documents have been indexed.")
    
 
