@@ -43,7 +43,7 @@ FIELD_WEIGHTS = {
 }
 
 # TF-IDF index in memory at module load time
-df = pd.read_csv("data/cleaned_data/games_may2024_cleaned.csv").fillna("")
+df = pd.read_csv("data/sample_data/games_sample.csv").fillna("")
 
 # Combnie fields into one text representation per document
 corpus = df.apply(
