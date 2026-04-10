@@ -12,11 +12,10 @@ load_dotenv()
 host = os.getenv("ES_HOST")
 port = os.getenv("ES_PORT")
 INDEX_NAME = os.getenv("ES_INDEX")
-TFIDF_INDEX_NAME = os.getenv("ES_INDEX_TFIDF")
-
 
 es_client = Elasticsearch(host + ":" + port)
 
+# Establishing a connection to elasticsearch built within a docker container
 try:
     info = es_client.info()
     print(f"Connected to Elasticsearch: {info['version']['number']}")
@@ -24,6 +23,8 @@ except Exception as e:
     print(f"Could not connect to Elasticsearch: {e}")
     raise
 
+
+# Mapping each key field
 FIELD_MAP = {
     "title": "name",
     "short_description": "short_description",
@@ -32,6 +33,7 @@ FIELD_MAP = {
     "tags": "tags"
 }
 
+# Creating field values
 FIELD_WEIGHTS = {
     "title": 3.5,
     "short_description": 2.5,
@@ -41,7 +43,7 @@ FIELD_WEIGHTS = {
 }
 
 # TF-IDF index in memory at module load time
-df = pd.read_csv("data/sample_data/games_sample.csv").fillna("")
+df = pd.read_csv("data/cleaned_data/games_may2024_cleaned.csv").fillna("")
 
 # Combnie fields into one text representation per document
 corpus = df.apply(

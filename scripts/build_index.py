@@ -1,16 +1,14 @@
-# One-time script to build the Elasticsearch index on Elastic Cloud.
-# Run this only once — the index persists on the cloud.
-# Usage: python scripts/build_index.py --data data/sample/games_sample.csv
-
+import argparse
 import pandas as pd
 from dotenv import load_dotenv
+from elasticsearch.helpers import bulk
+import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.retrieval import es_client
 
 load_dotenv()
 INDEX_NAME = os.getenv("ES_INDEX")
-TFIDF_INDEX_NAME = os.getenv("ES_INDEX_TFIDF")
-file = "data\sample_data\games_sample.csv"
 
 def create_index(recreate=False):
     """Define the index mapping and create it in Elasticsearch"""
@@ -107,24 +105,35 @@ def index_documents_bm25(filepath: str):
     # Printing the number of documents we are indexing
     print(f"Indexing {len(df)} documents...")
 
-    for _, row in df.iterrows():
-        doc = {
-            "app_id": row["AppID"],
-            "title": row["name"],
-            "short_description": row["short_description"],
-            "detailed_description": row["detailed_description"],
-            "genres": row["genres"],
-            "tags": row["tags"]
+    actions = [
+        {
+            "_index": INDEX_NAME,
+            "_id": row["AppID"],
+            "_source": {
+                "app_id": row["AppID"],
+                "title": row["name"],
+                "short_description": row["short_description"],
+                "detailed_description": row["detailed_description"],
+                "genres": row["genres"],
+                "tags": row["tags"]
+            }
         }
+        for _, row in df.iterrows()
+    ]
 
-        es_client.index(
-            index=INDEX_NAME,
-            id=row["AppID"],
-            document=doc
-        )
+    bulk(es_client, actions)
     print(f"{len(df)} documents have been indexed.")
    
 
 if __name__ == "__main__":
-    create_index(True)
-    index_documents_bm25(file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--data",
+        type=str,
+        default="data/sample_data/games_sample.csv",
+        help="Path to the CSV dataset"
+    )
+    args = parser.parse_args()
+
+    create_index()
+    index_documents_bm25(args.data)
