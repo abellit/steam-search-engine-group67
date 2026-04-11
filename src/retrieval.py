@@ -43,7 +43,7 @@ FIELD_WEIGHTS = {
 }
 
 # Reading CSV data and filltering out non applicable values from the dataset
-df = pd.read_csv("data\sample_data\games_sample.csv").fillna("")
+df = pd.read_csv("data/sample_data/games_sample.csv").fillna("")
 
 # Combnie fields into one text representation per document
 corpus = df.apply(
