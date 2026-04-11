@@ -7,9 +7,8 @@ def get_model():
     
     return SentenceTransformer("all-MiniLM-L6-v2")
 
-
+# Re-ranks candidate documents using semantic similarity
 def rerank_documents(query: str, candidates: list[dict], top_k: int = 10) -> list[dict]:
-    """Reramk game document candidates using semantic similarity"""
     
     # If no results return []
     if not candidates:
