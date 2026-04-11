@@ -42,8 +42,8 @@ FIELD_WEIGHTS = {
     "tags": 2.5
 }
 
-# TF-IDF index in memory at module load time
-df = pd.read_csv("data/sample_data/games_sample.csv").fillna("")
+# Reading CSV data and filltering out non applicable values from the dataset
+df = pd.read_csv("data\sample_data\games_sample.csv").fillna("")
 
 # Combnie fields into one text representation per document
 corpus = df.apply(
@@ -59,7 +59,7 @@ vectoriser = TfidfVectorizer(stop_words="english")
 tfidf_matrix = vectoriser.fit_transform(corpus)
 
 def search_tfidf(query: str, top_k: int = 10) -> list[dict]:
-    """Search using TF-IDF across all fields equally."""
+    # Search using TF-IDF across all fields equally.
     query = " ".join(preprocess_text(query))
     query_vector = vectoriser.transform([query])
     scores = cosine_similarity(query_vector, tfidf_matrix)[0]
@@ -79,7 +79,7 @@ def search_tfidf(query: str, top_k: int = 10) -> list[dict]:
 
 
 def search_bm25(query: str, top_k: int = 10) -> list[dict]:
-    """Search using flat BM25 across all fields equally."""
+    # Search using flat BM25 across all fields equally.
     query = " ".join(preprocess_text(query))
     response = es_client.search(
         index=INDEX_NAME,
@@ -97,7 +97,7 @@ def search_bm25(query: str, top_k: int = 10) -> list[dict]:
 
 
 def search_bm25f(query: str, top_k: int = 10) -> list[dict]:
-    """Search using BM25F with field weights."""
+    # Search using BM25F with field weights.
     query = " ".join(preprocess_text(query))
     # Build boosted fields list from FIELD_WEIGHTS
     boosted_fields = [f"{field}^{weight}" for field, weight in FIELD_WEIGHTS.items()]
@@ -118,8 +118,7 @@ def search_bm25f(query: str, top_k: int = 10) -> list[dict]:
 
 
 def _parse_results(response) -> list[dict]:
-    """Extract relevant fields from Elasticsearch response."""
-
+    # Extract relevant fields from Elasticsearch response.
     results = []
     for hit in response["hits"]["hits"]:
         results.append({

@@ -6,7 +6,7 @@ venv/
 .env
 
 # Dataset - too large for git
-data/raw/
+data/cleaned_data/
 *.csv
 !data/sample_data/games_sample.csv
 

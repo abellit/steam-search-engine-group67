@@ -22,7 +22,6 @@ def rerank_documents(query: str, candidates: list[dict], top_k: int = 10) -> lis
     ]
 
     # All candidates and query encoded into vectors
-    
     model = get_model()
     query_embeddings = model.encode(query)
     candidate_embeddings = model.encode(candidate_texts)

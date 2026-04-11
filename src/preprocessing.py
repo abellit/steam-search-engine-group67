@@ -12,21 +12,28 @@ STOPWORDS = set(stopwords.words("english"))
 STEMMER = PorterStemmer()
 
 def preprocess_text(text):
-    if text is None:   #handling missing values
+    # handles missing values
+    if text is None:   
         return []
 
-    text = str(text) #make string
+    # make string
+    text = str(text) 
 
-    text = text.lower()  #make lowercase
+    # lowercasing
+    text = text.lower() 
 
-    text = re.sub(r"[^a-z0-9\s]", " ", text)   #remove punctuation 
+    # removing punctuation 
+    text = re.sub(r"[^a-z0-9\s]", " ", text)   
 
-    tokens = text.split()    #tokenise
+    # tokenisation
+    tokens = text.split()    
 
-    tokens = [t for t in tokens if t not in STOPWORDS]   #remove stopwords
+    # removing stopwords
+    tokens = [t for t in tokens if t not in STOPWORDS]   
 
+    # stemming
     if USE_STEMMING:
-        tokens = [STEMMER.stem(t) for t in tokens]    #stemming
+        tokens = [STEMMER.stem(t) for t in tokens]    
 
     return tokens
 

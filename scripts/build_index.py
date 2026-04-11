@@ -11,9 +11,8 @@ load_dotenv()
 INDEX_NAME = os.getenv("ES_INDEX")
 
 def create_index(recreate=False):
-    """Define the index mapping and create it in Elasticsearch"""
-
-    # Safety check
+    
+    # Doing a safety check
     if es_client.indices.exists(index=INDEX_NAME):
         if recreate:
             print(f"Deleting existing index '{INDEX_NAME}'...")
@@ -95,8 +94,8 @@ def create_index(recreate=False):
 
 
 def index_documents_bm25(filepath: str):
-    """Read the CSV and index each game as a document"""
 
+    # Read the csv file
     df = pd.read_csv(filepath)
 
     # Replacing missing values with empty strings
@@ -121,7 +120,12 @@ def index_documents_bm25(filepath: str):
         for _, row in df.iterrows()
     ]
 
-    bulk(es_client, actions)
+    bulk(
+        es_client, 
+        actions,
+        chunk_size=250,
+        request_timeout=60
+    )
     print(f"{len(df)} documents have been indexed.")
    
 
