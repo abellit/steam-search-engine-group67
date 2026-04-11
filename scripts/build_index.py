@@ -48,7 +48,7 @@ def create_index(recreate=False):
                 },
                 "detailed_description_similarity": {
                     "type": "BM25",
-                    "b": 0.9,
+                    "b": 0.75,
                     "k1": 1.25
                 }
             }
